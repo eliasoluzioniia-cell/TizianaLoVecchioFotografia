@@ -168,7 +168,7 @@ export function EditorialGrid() {
             <img
               src={images[activeIdx].src}
               alt={images[activeIdx].title}
-              className="max-h-[75vh] max-w-full md:max-h-[82vh] object-contain select-none transition-all duration-300"
+              className="max-h-[85vh] max-w-[95vw] md:max-h-[88vh] md:max-w-[90vw] object-contain select-none transition-all duration-300"
               crossOrigin="anonymous"
             />
             {/* Metadata Info */}
