@@ -1,6 +1,6 @@
 export function ContactSection() {
   return (
-    <footer id="contact" className="relative bg-primary px-6 py-24 text-primary-foreground md:px-14 md:py-36">
+    <footer id="contact" className="relative bg-primary px-6 py-24 text-primary-foreground md:px-14 md:py-36 snap-start">
       <div className="mx-auto max-w-7xl">
         <div className="flex items-center gap-3 text-xs uppercase tracking-[0.35em] text-primary-foreground/60">
           <span className="h-px w-8 bg-accent" />

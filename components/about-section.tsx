@@ -1,6 +1,6 @@
 export function AboutSection() {
   return (
-    <section id="about" className="relative border-t border-border bg-secondary px-6 py-24 md:px-14 md:py-36">
+    <section id="about" className="relative border-t border-border bg-secondary px-6 py-24 md:px-14 md:py-36 snap-start">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 md:grid-cols-12 md:gap-16">
         {/* Portrait */}
         <div className="md:col-span-5">

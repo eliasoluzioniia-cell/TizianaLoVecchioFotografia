@@ -156,6 +156,15 @@
 }
 
 @layer base {
+  html {
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+  }
+  @media (max-width: 768px) {
+    html {
+      scroll-snap-type: y proximity;
+    }
+  }
   * {
     @apply border-border outline-ring/50;
   }

@@ -100,7 +100,7 @@ export function EditorialGrid() {
   }, [activeIdx])
 
   return (
-    <section id="work" className="relative bg-background">
+    <section id="work" className="relative bg-background snap-start">
       {/* 12-column asymmetric mosaic grid on both mobile and desktop */}
       <div className="grid auto-rows-[35vw] grid-cols-12 gap-1 sm:auto-rows-[28vw] md:auto-rows-[19vw] md:gap-2">
         {tiles.map((tile, idx) => (
