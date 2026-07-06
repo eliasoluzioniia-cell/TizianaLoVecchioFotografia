@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 type Slide = {
   src: string
   title: string
+  description?: string
 }
 
 const FALLBACK_SLIDES: Slide[] = [
@@ -75,7 +76,7 @@ export function VerticalGallery({ slides: initialSlides }: { slides?: Slide[] })
               {slide.title}
             </h2>
             <span className="mt-5 border-b border-background/70 pb-1 text-xs uppercase tracking-[0.4em] text-background/90 select-none">
-              Esplora
+              {slide.description || "Esplora"}
             </span>
           </div>
         </div>

@@ -7,6 +7,7 @@ const notion = new Client({
 export interface GalleryItem {
   src: string
   title: string
+  description?: string
 }
 
 export interface GridItem {
@@ -124,7 +125,8 @@ export async function getGallery(): Promise<GalleryItem[]> {
       const title = page.properties.Titolo?.title?.map((t: any) => t.plain_text).join("") || ""
       const fileProp = page.properties.Foto?.files?.[0]
       const src = fileProp ? (fileProp.type === "file" ? fileProp.file.url : fileProp.external.url) : ""
-      return { title, src }
+      const description = page.properties.Descrizione?.rich_text?.map((t: any) => t.plain_text).join("") || ""
+      return { title, src, description }
     }).filter(item => item.src !== "")
   } catch (error) {
     console.error("Errore getGallery da Notion, provo fallback query semplice:", error)
@@ -135,7 +137,8 @@ export async function getGallery(): Promise<GalleryItem[]> {
                       page.properties.Name?.title?.map((t: any) => t.plain_text).join("") || ""
         const fileProp = page.properties.Foto?.files?.[0] || page.properties.Image?.files?.[0]
         const src = fileProp ? (fileProp.type === "file" ? fileProp.file.url : fileProp.external.url) : ""
-        return { title, src }
+        const description = page.properties.Descrizione?.rich_text?.map((t: any) => t.plain_text).join("") || ""
+        return { title, src, description }
       }).filter(item => item.src !== "")
     } catch (fallbackError) {
       console.error("Errore query fallback getGallery:", fallbackError)
