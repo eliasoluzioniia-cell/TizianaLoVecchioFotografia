@@ -7,7 +7,7 @@ type Slide = {
   title: string
 }
 
-const slides: Slide[] = [
+const FALLBACK_SLIDES: Slide[] = [
   { src: "/gallery/h1.jpg", title: "Orizzonti" },
   { src: "/gallery/h2.jpg", title: "Luce e Silenzio" },
   { src: "/gallery/h3.jpg", title: "Natura Silente" },
@@ -15,7 +15,8 @@ const slides: Slide[] = [
   { src: "/gallery/h5.jpg", title: "Sospensione" },
 ]
 
-export function VerticalGallery() {
+export function VerticalGallery({ slides: initialSlides }: { slides?: Slide[] }) {
+  const slides = initialSlides && initialSlides.length > 0 ? initialSlides : FALLBACK_SLIDES
   const [active, setActive] = useState(0)
   const [showDots, setShowDots] = useState(true)
 
@@ -30,8 +31,9 @@ export function VerticalGallery() {
         setActive(index)
       }
       
-      // Hide pagination dots and scroll hint when user scrolls past the 5 slides
-      if (scrollY > height * 4.4) {
+      // Nasconde i pallini e il suggerimento di scorrimento quando l'utente scorre oltre le slide
+      const limit = height * (slides.length - 1 + 0.4)
+      if (scrollY > limit) {
         setShowDots(false)
       } else {
         setShowDots(true)

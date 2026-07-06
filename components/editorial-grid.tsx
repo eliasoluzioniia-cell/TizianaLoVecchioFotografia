@@ -2,7 +2,13 @@
 
 import { useEffect, useRef, useState } from "react"
 
-const images = [
+type GridImage = {
+  src: string
+  title: string
+  category: string
+}
+
+const FALLBACK_IMAGES: GridImage[] = [
   { src: "/gallery/e1.jpg", title: "Riflessi", category: "Studio" },
   { src: "/gallery/e2.jpg", title: "Geometrie", category: "Architettura" },
   { src: "/gallery/e3.jpg", title: "Forme", category: "Natura" },
@@ -19,22 +25,22 @@ const images = [
   { src: "/gallery/e14.jpg", title: "Elementi", category: "Minimal" },
 ]
 
-// Asymmetric mosaic layout applied on all screen sizes for fluid mobile grids too.
-const tiles = [
-  { i: 0, area: "col-span-7 row-span-2" }, // rows 1-2
-  { i: 1, area: "col-span-5 row-span-1" }, // row 1
-  { i: 2, area: "col-span-5 row-span-1" }, // row 2
-  { i: 3, area: "col-span-4 row-span-2" }, // rows 3-4
-  { i: 4, area: "col-span-8 row-span-1" }, // row 3
-  { i: 5, area: "col-span-4 row-span-1" }, // row 4
-  { i: 6, area: "col-span-4 row-span-1" }, // row 4
-  { i: 7, area: "col-span-3 row-span-2" }, // rows 5-6
-  { i: 8, area: "col-span-5 row-span-1" }, // row 5
-  { i: 9, area: "col-span-4 row-span-2" }, // rows 5-6
-  { i: 10, area: "col-span-5 row-span-1" }, // row 6
-  { i: 11, area: "col-span-6 row-span-2" }, // rows 7-8
-  { i: 12, area: "col-span-6 row-span-1" }, // row 7
-  { i: 13, area: "col-span-6 row-span-1" }, // row 8
+// Classi CSS per la griglia asimmetrica, applicate in modo ciclico in base al numero di elementi
+const TILE_PATTERNS = [
+  "col-span-7 row-span-2", // rows 1-2
+  "col-span-5 row-span-1", // row 1
+  "col-span-5 row-span-1", // row 2
+  "col-span-4 row-span-2", // rows 3-4
+  "col-span-8 row-span-1", // row 3
+  "col-span-4 row-span-1", // row 4
+  "col-span-4 row-span-1", // row 4
+  "col-span-3 row-span-2", // rows 5-6
+  "col-span-5 row-span-1", // row 5
+  "col-span-4 row-span-2", // rows 5-6
+  "col-span-5 row-span-1", // row 6
+  "col-span-6 row-span-2", // rows 7-8
+  "col-span-6 row-span-1", // row 7
+  "col-span-6 row-span-1", // row 8
 ]
 
 function Tile({
@@ -42,7 +48,7 @@ function Tile({
   className = "",
   onClick,
 }: {
-  item: (typeof images)[number]
+  item: GridImage
   className?: string
   onClick?: () => void
 }) {
@@ -66,9 +72,19 @@ function Tile({
   )
 }
 
-export function EditorialGrid() {
+export function EditorialGrid({ images: initialImages }: { images?: GridImage[] }) {
+  const images = initialImages && initialImages.length > 0 ? initialImages : FALLBACK_IMAGES
   const [activeIdx, setActiveIdx] = useState<number | null>(null)
   const touchStartRef = useRef<number>(0)
+
+  // Genera dinamicamente le tiles mappandole sui pattern CSS asimmetrici
+  const gridTiles = images.map((_, idx) => {
+    const area = TILE_PATTERNS[idx % TILE_PATTERNS.length]
+    return {
+      i: idx,
+      area,
+    }
+  })
 
   const handlePrev = () => {
     if (activeIdx !== null) {
@@ -103,7 +119,7 @@ export function EditorialGrid() {
     <section id="work" className="relative bg-background snap-start">
       {/* 12-column asymmetric mosaic grid on both mobile and desktop */}
       <div className="grid auto-rows-[35vw] grid-cols-12 gap-1 sm:auto-rows-[28vw] md:auto-rows-[19vw] md:gap-2">
-        {tiles.map((tile, idx) => (
+        {gridTiles.map((tile, idx) => (
           <Tile
             key={idx}
             item={images[tile.i]}
