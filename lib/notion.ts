@@ -222,10 +222,21 @@ export async function getAbout(): Promise<AboutData | null> {
     const portraitBlock = blocks.find(b => b.type === "image")
     const portrait = portraitBlock ? getBlockImageUrl(portraitBlock) : ""
 
+    // Cerca l'indice del blocco di inizio solo tra le intestazioni H1/H2/H3 reali
     let startIndex = blocks.findIndex(b => {
       const text = getBlockText(b).toLowerCase()
-      return text.includes("about me") || text.includes("su di me") || text.includes("dietro l'obiettivo")
+      const isHeading = b.type.startsWith("heading_")
+      return isHeading && (text.includes("dietro l'obiettivo") || text.includes("dietro la tela"))
     })
+
+    // Fallback su altre intestazioni se non trova quella principale della biografia
+    if (startIndex === -1) {
+      startIndex = blocks.findIndex(b => {
+        const text = getBlockText(b).toLowerCase()
+        const isHeading = b.type.startsWith("heading_")
+        return isHeading && (text.includes("about me") || text.includes("su di me"))
+      })
+    }
 
     if (startIndex === -1) {
       startIndex = 0
@@ -240,11 +251,13 @@ export async function getAbout(): Promise<AboutData | null> {
       const text = getBlockText(block).trim()
       if (!text) continue
 
-      if (text.toLowerCase().includes("link social") || text.toLowerCase().includes("instagram |")) {
+      // Ignora esplicitamente i link social e l'etichetta del profilo
+      const lowerText = text.toLowerCase()
+      if (lowerText.includes("link social") || lowerText.includes("instagram |")) {
         break
       }
 
-      if (text.toLowerCase() === "dietro l'obiettivo") {
+      if (lowerText === "dietro l'obiettivo" || lowerText === "dietro la tela" || lowerText === "foto profilo") {
         continue
       }
 
